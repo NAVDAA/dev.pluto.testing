@@ -1,4 +1,5 @@
 import __SysPlutoControl__
+import json as _Json_
 from os import system as __SysCommandControl__
 from os import path as __SysPathControl__
 from time import sleep as __SysSleepSec__
@@ -72,7 +73,7 @@ def __PlutoSecuritySystem__():
     
     
     
-    
+    # get the security system working, someday
     
     
     
@@ -106,8 +107,12 @@ def __SysReport__(ReportType, ReportLogFile, ReportMsgLog, ReportCode, ReportMsg
                 ReportLog.write(f"\n [RUN ID: {_RunID_}]: [WARN:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
             __ConsoleWrtiteline__(f" [WARN:  {ReportCode}] {ReportMsgUser}")
     elif ReportType == "Info":
-        
-        
+        with open(ReportLogFile, 'a') as ReportLog:
+                ReportLog.write(f"\n [RUN ID: {_RunID_}]: [INFO:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
+    elif ReportType == "InfoUsr":
+        with open(ReportLogFile, 'a') as ReportLog:
+                ReportLog.write(f"\n [RUN ID: {_RunID_}]: [INFO:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
+        __ConsoleWrtiteline__(f" [INFO: {ReportCode}] {ReportMsgUser}")
         pass
 
 
