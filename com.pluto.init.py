@@ -25,7 +25,7 @@ if SecTMPLenght == 1:
 else:
     _SysGetDateTime_second = SecTMPStr
     pass
-MinuteTMP = _SysGetDateTime_.second
+MinuteTMP = _SysGetDateTime_.minute
 MinuteTMPStr = str(MinuteTMP)
 MinuteTMPLenght = len(MinuteTMPStr)
 if MinuteTMPLenght == 1:
@@ -34,7 +34,7 @@ if MinuteTMPLenght == 1:
 else:
     _SysGetDateTime_minute = MinuteTMPStr
     pass
-HourTMP = _SysGetDateTime_.second
+HourTMP = _SysGetDateTime_.hour
 HourTMPStr = str(HourTMP)
 HourTMPLenght = len(HourTMPStr)
 if HourTMPLenght == 1:
@@ -53,6 +53,7 @@ DayTMPLenght = len(DayTMPStr)
 if DayTMPLenght == 1:
     if MonthTMPLenght == 1:
         _SysGetDateTime_day = "0" + DayTMPStr + " "
+        _SysGetDateTime_month = "0" + MonthTMPStr
         pass
     else:
         _SysGetDateTime_day = "0" + DayTMPStr
@@ -61,6 +62,7 @@ if DayTMPLenght == 1:
 else:
     if MonthTMPLenght == 1:
         _SysGetDateTime_day = DayTMPStr + " "
+        _SysGetDateTime_month = "0" + MonthTMPStr
         pass
     else:
         _SysGetDateTime_day = DayTMPStr
@@ -69,18 +71,18 @@ else:
 _SysGetDateTimeFormat_ = f"{_SysGetDateTime_.year}-{_SysGetDateTime_month}-{_SysGetDateTime_day} {_SysGetDateTime_hour}:{_SysGetDateTime_minute}:{_SysGetDateTime_second}"
 
 def __PlutoSecuritySystem__():
-    
-    
-    
-    
-    # get the security system working, someday
-    
-    
-    
-    pass
+    pass # get the security system working, someday
 
-def __SysReport__(ReportType, ReportLogFile, ReportMsgLog, ReportCode, ReportMsgUser):
-    # Report Types: Error, ErrorUsr, Warn, WarnUsr, Info, InfoUsr
+def __SysReport__(ReportType, ReportLogFile, ReportMsgLog, ReportMsgUser, ReportCode="0x????"):
+    """PLUTO Report System.
+
+    Args:
+        ReportType (str): Type of Report, Error, ErrorUsr, Warn, WarnUsr, Info, InfoUsr.
+        ReportLogFile (str): Provide log file path here. exaple: __SysPlutoControl__.PlutoLogFile.
+        ReportMsgLog (str): String printed to log file.
+        ReportMsgUser (str): String printed to user console.
+        ReportCode (str, optional): Report code, included in log and user console. Defaults to "0x????".
+    """
     if ReportType == "Error":
         with open(ReportLogFile, 'a') as ReportLog:
             ReportLog.write(f"\n [RUN ID: {_RunID_}]: [ERROR: {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
@@ -91,21 +93,12 @@ def __SysReport__(ReportType, ReportLogFile, ReportMsgLog, ReportCode, ReportMsg
         __ConsoleWrtiteline__(f" [ERROR: {ReportCode}] {ReportMsgUser}")
         exit()
     elif ReportType == "Warn":
-        if ReportCode == "":
-            with open(ReportLogFile, 'a') as ReportLog:
-                ReportLog.write(f"\n [RUN ID: {_RunID_}]: [WARN         ] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
-        else:
-            with open(ReportLogFile, 'a') as ReportLog:
-                ReportLog.write(f"\n [RUN ID: {_RunID_}]: [WARN:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
+        with open(ReportLogFile, 'a') as ReportLog:
+            ReportLog.write(f"\n [RUN ID: {_RunID_}]: [WARN:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
     elif ReportType == "WarnUsr":
-        if ReportCode == "":
-            with open(ReportLogFile, 'a') as ReportLog:
-                ReportLog.write(f"\n [RUN ID: {_RunID_}]: [WARN         ] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
-            __ConsoleWrtiteline__(f" [WARN         ] {ReportMsgUser}")
-        else:
-            with open(ReportLogFile, 'a') as ReportLog:
-                ReportLog.write(f"\n [RUN ID: {_RunID_}]: [WARN:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
-            __ConsoleWrtiteline__(f" [WARN:  {ReportCode}] {ReportMsgUser}")
+        with open(ReportLogFile, 'a') as ReportLog:
+            ReportLog.write(f"\n [RUN ID: {_RunID_}]: [WARN:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
+        __ConsoleWrtiteline__(f" [WARN:  {ReportCode}] {ReportMsgUser}")
     elif ReportType == "Info":
         with open(ReportLogFile, 'a') as ReportLog:
                 ReportLog.write(f"\n [RUN ID: {_RunID_}]: [INFO:  {ReportCode}] @ [{_SysGetDateTimeFormat_}] {ReportMsgLog}")
@@ -115,31 +108,50 @@ def __SysReport__(ReportType, ReportLogFile, ReportMsgLog, ReportCode, ReportMsg
         __ConsoleWrtiteline__(f" [INFO: {ReportCode}] {ReportMsgUser}")
         pass
 
+def _WriteLineLogo_(LogoSize="2", LogoNumber=1):
+    if LogoSize == "2" and LogoNumber == 1:
+        __ConsoleWrtiteline__(
+            "███ █   █ █ ▀█▀ ███",
+            "\n█   █▄▄ █▄█  █  ███")
+    elif LogoSize == "2" and LogoNumber == 2:
+        __ConsoleWrtiteline__(
+            "█▀ █ ▄▀▄ █ █ ██▄ ▄▀▄",
+            "\n█ ▄█ █ █ ▀▄▀ ██▀ █ █")
+
+def __PlutoImportJSON__(format, url=None, file=None):
+    if format == "pluto":
+        if url is None and file is not None:
+            with open(file, "r") as File:
+                _JSON_Import_ = _Json_.load(File)
+            
+            __ConsoleWrtiteline__(f"TMP LOADING JSON")
+            if _JSON_Import_["SysPluto"][0]["AppOrServerValue"][0]["IsApp"] == "True" and _JSON_Import_["SysPluto"][0]["AppOrServerValue"][0]["IsServer"] == "False":
+                
+                pass
+            elif _JSON_Import_["SysPluto"][0]["AppOrServerValue"][0]["IsApp"] == "False" and _JSON_Import_["SysPluto"][0]["AppOrServerValue"][0]["IsServer"] == "True":
+
+                pass
+            elif _JSON_Import_["SysPluto"][0]["AppOrServerValue"][0]["IsApp"] == "True" and _JSON_Import_["SysPluto"][0]["AppOrServerValue"][0]["IsServer"] == "True":
+                __SysReport__("ErrorUsr",
+                              __SysPlutoControl__.PlutoLogFile,
+                              __SysPlutoControl__.ES0x0023 % (_JSON_Import_["SysPluto"][0]["DisplayValue"][0]["Title"].upper().replace(" ", "-")),
+                              __SysPlutoControl__.EU0x0023 % (_JSON_Import_["SysPluto"][0]["DisplayValue"][0]["Title"]),
+                              "0x0023")
+                exit()
+            pass
+    
+    
+    pass
 
 
-# __SysReport__("ErrorUsr", __SysPlutoControl__.PlutoLogFile, __SysPlutoControl__.ES0x0000, "0x0000", __SysPlutoControl__.EU0x0000)
-# __SysReport__("")
-# try:
-#     if __SysPlatformSetting__() == "Windows":
-#         pass
-#     else:
-#         __SysReportError__("0x0022", __SysPlutoControl__.PlutoLogFile, __SysPlutoControl__.E0x0022 % (__SysPlutoControl__.PlutoSysNameSM, __SysPlatformSetting__()))
-# except:
-#     __SysReportError__("0x0022", __SysPlutoControl__.PlutoLogFile, __SysPlutoControl__.E0x0022 % (__SysPlutoControl__.PlutoSysNameSM, __SysPlatformSetting__()))
+__ConsoleWrtiteline__("CodeName:")
+_WriteLineLogo_(LogoNumber=1)
+__ConsoleWrtiteline__("\nName:")
+_WriteLineLogo_(LogoNumber=2)
 
 
-# __SysReportLEGACY__("PASSED", __SysPlutoControl__.PlutoLogFile, __SysPlutoControl__.PlutoPassedMsg % __SysPathControl__.basename(__file__))
-
-##
-#
-#     if __SysPlatformSetting__() == "Windows":
-#         if __SysPlatformRelease__ == "10" or __SysPlatformRelease__ == "post2022":
-#             pass
-#         elif __SysPlatformRelease__ == "8":
-#             __SysReportError__("0x0012", __SysPlutoControl__.PlutoLogFile, __SysPlutoControl__.E0x0012 % (__SysPlatformSetting__(), __SysPlutoControl__.PlutoSysNameSM, __SysPlatformSetting__()))
-#         else:
-#            
-#     else:
-#         __SysReportError__("0x0014", __SysPlutoControl__.PlutoLogFile, __SysPlutoControl__.E0x0014 % (__SysPlatformSetting__(), __SysPlutoControl__.PlutoSysNameSM))
-#
-#     
+__SysReport__("InfoUsr",
+              __SysPlutoControl__.PlutoLogFile,
+              __SysPlutoControl__.IS0x0001 % (__SysPlutoControl__.PlutoCodename.upper()),
+              __SysPlutoControl__.IU0x0001 % (__SysPlutoControl__.PlutoCodename),
+              "0x0001")
