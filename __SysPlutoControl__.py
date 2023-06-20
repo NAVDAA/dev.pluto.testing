@@ -16,6 +16,7 @@ PlutoPythonPath = ".\\sys.pluto-python_NEW\\python.exe"
 PlutoPipPath = ".\\sys.pluto-python_NEW\\python.exe -m pip"
 PlutoLogFile = ".\\com.pluto.init.log"
 PlutoLogFileV2 = ".\\com.pluto-init.log"
+PlutoPID = "2365"
 PlutoVer = "0.0.0.2-PreALPHA"
 PlutoArchitectureSupported = "64" # 64 = 64-bit; 32 = 32-bit; ARM = 32-bit ARM; ARM64 = 64-bit ARM64
 PlutoCopyright = "Copyright (c) %s by %s. All rights reserved."
