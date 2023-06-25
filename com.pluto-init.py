@@ -12,6 +12,8 @@ import datetime as __SysDateControl__
 from argparse import ArgumentParser as __SysArgumentParser__
 import argparse as __SysArgumentControl__
 import shutil as __SysFileControl__
+import random as __SysRandomizer__
+_RunID_ = __SysRandomizer__.randint(10000, 99999)
 _SysGetDateTime_ = __SysDateControl__.datetime.now()
 __ConsoleWrtiteline__ = print
 __GetUserInputData__ = input
